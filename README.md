@@ -1,187 +1,231 @@
-# ASCLAB .NET Core PoC - LAB Insurance Sales Portal
-
-This is an example of a very simplified insurance sales system made in a microservice architecture using:
-
-* .NET 7
-* Entity Framework Core
-* MediatR
-* Marten
-* Eureka
-* Ocelot
-* JWT Tokens
-* RestEase
-* RawRabbit
-* NHibernate
-* Polly
-* NEST (ElasticSearch client)
-* Dapper
-* DynamicExpresso
-* SignalR
-
-**Comprehensive guide describing the architecture, applied design patterns and technologies can be found on our blog:**
-
-* [Part 1 The Plan](https://www.altkomsoftware.com/blog/building-microservices-net-core-part-1-plan/)
-* [Part 2 Shaping microservice internal architecture with CQRS and MediatR](https://www.altkomsoftware.com/blog/microservices-net-core-cqrs-mediatr/)
-* [Part 3 Service Discovery with Eureka](https://www.altkomsoftware.com/blog/microservices-service-discovery-eureka/)
-* [Part 4 Building API Gateways With Ocelot](https://www.altkomsoftware.com/blog/building-api-gateways-with-ocelot/)
-* [Part 5 Marten An Ideal Repository For Your Domain Aggregates](https://www.altkomsoftware.com/blog/building-microservices-net-core-part-5-marten-ideal-repository-domain-aggregates/)
-* [Part 6 Real time server client communication with SignalR and RabbitMQ](https://www.altkomsoftware.com/blog/building-microservices-6/)
-* [Part 7 Transactional Outbox with RabbitMQ](https://www.altkomsoftware.com/blog/microservices-outbox-rabbitmq/)
-
-Other articles around microservices that could be interesting:
-
-* [CQRS and Event Sourcing Intro For Developers](https://www.altkomsoftware.com/blog/cqrs-event-sourcing/)
-* [From monolith to microservices – to migrate or not to migrate?](https://www.altkomsoftware.com/blog/monolith-microservices/)
-* [Event Storming — innovation in IT projects](https://www.altkomsoftware.com/blog/event-storming/)
-
-## Business Case
-
-We are going to build very simplified system for insurance agents to sell various kind of insurance products.
-Insurance agents will have to log in and system will present them with list of products they can sell. Agents will be able to view products and find a product appropriate for their customers. Then they can create an offer and system will calculate a price based on provided parameters. \
-Finally agent will be able to confirm the sale by converting offer to policy and printing pdf certificate. \
-Portal will also give them ability to search and view offer and policies. \
-Portal will also have some basic social network features like chat for agents. \
-Latest feature is a business dashboard that displays sales stats using ElasticSearch Aggregations and ChartJS.
-
-## Architecture overview
-
-<p align="center">
-    <img alt="NET Microservices Architecture" src="https://raw.githubusercontent.com/asc-lab/dotnetcore-microservices-poc/master/readme-images/dotnetcore-microservices-architecture.png" />
+<div class="Box-sc-g0xbh4-0 bJMeLZ js-snippet-clipboard-copy-unpositioned" data-hpc="true"><article class="markdown-body entry-content container-lg" itemprop="text"><h1 tabindex="-1" dir="auto"><a id="user-content-asclab-net-core-poc---lab-insurance-sales-portal" class="anchor" aria-hidden="true" tabindex="-1" href="#asclab-net-core-poc---lab-insurance-sales-portal"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">ASCLAB .NET Core PoC - LAB 保险销售门户</font></font></h1>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这是一个在微服务架构中使用的非常简化的保险销售系统的示例：</font></font></p>
+<ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">.NET 7</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">实体框架核心</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">媒体R</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">貂</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">尤里卡</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">豹猫</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">JWT 令牌</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">轻松休息</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">生兔肉</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">NHibernate</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">波莉</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">NEST（ElasticSearch 客户端）</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">衣冠楚楚</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">动态快递</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">信号R</font></font></li>
+</ul>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">描述架构、应用设计模式和技术的综合指南可以在我们的博客上找到：</font></font></strong></p>
+<ul dir="auto">
+<li><a href="https://www.altkomsoftware.com/blog/building-microservices-net-core-part-1-plan/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">第 1 部分 计划</font></font></a></li>
+<li><a href="https://www.altkomsoftware.com/blog/microservices-net-core-cqrs-mediatr/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">第 2 部分 使用 CQRS 和 MediatR 塑造微服务内部架构</font></font></a></li>
+<li><a href="https://www.altkomsoftware.com/blog/microservices-service-discovery-eureka/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">第 3 部分：使用 Eureka 进行服务发现</font></font></a></li>
+<li><a href="https://www.altkomsoftware.com/blog/building-api-gateways-with-ocelot/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">第 4 部分 使用 Ocelot 构建 API 网关</font></font></a></li>
+<li><a href="https://www.altkomsoftware.com/blog/building-microservices-net-core-part-5-marten-ideal-repository-domain-aggregates/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">第 5 部分 Marten 是您的域聚合的理想存储库</font></font></a></li>
+<li><a href="https://www.altkomsoftware.com/blog/building-microservices-6/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">第 6 部分 使用 SignalR 和 RabbitMQ 进行实时服务器客户端通信</font></font></a></li>
+<li><a href="https://www.altkomsoftware.com/blog/microservices-outbox-rabbitmq/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">第 7 部分 RabbitMQ 事务发件箱</font></font></a></li>
+</ul>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">有关微服务的其他可能有趣的文章：</font></font></p>
+<ul dir="auto">
+<li><a href="https://www.altkomsoftware.com/blog/cqrs-event-sourcing/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">面向开发人员的 CQRS 和事件溯源简介</font></font></a></li>
+<li><a href="https://www.altkomsoftware.com/blog/monolith-microservices/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">从整体架构到微服务——迁移还是不迁移？</font></font></a></li>
+<li><a href="https://www.altkomsoftware.com/blog/event-storming/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">事件风暴——IT 项目的创新</font></font></a></li>
+</ul>
+<h2 tabindex="-1" dir="auto"><a id="user-content-business-case" class="anchor" aria-hidden="true" tabindex="-1" href="#business-case"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">商业案例</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">我们将为保险代理人建立非常简化的系统来销售各种保险产品。</font><font style="vertical-align: inherit;">保险代理人必须登录，系统将向他们提供他们可以销售的产品列表。</font><font style="vertical-align: inherit;">代理商将能够查看产品并找到适合其客户的产品。</font><font style="vertical-align: inherit;">然后他们可以创建报价，系统将根据提供的参数计算价格。</font></font><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+最后，代理商将能够通过将报价转换为保单并打印 pdf 证书来确认销售。</font></font><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+门户网站还使他们能够搜索和查看优惠和政策。</font></font><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+门户网站还将具有一些基本的社交网络功能，例如代理聊天。</font></font><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+最新功能是一个业务仪表板，使用 ElasticSearch 聚合和 ChartJS 显示销售统计数据。</font></font></p>
+<h2 tabindex="-1" dir="auto"><a id="user-content-architecture-overview" class="anchor" aria-hidden="true" tabindex="-1" href="#architecture-overview"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">架构概述</font></font></h2>
+<p align="center" dir="auto">
+    <a target="_blank" rel="noopener noreferrer nofollow" href="https://raw.githubusercontent.com/asc-lab/dotnetcore-microservices-poc/master/readme-images/dotnetcore-microservices-architecture.png"><img alt="NET微服务架构" src="https://raw.githubusercontent.com/asc-lab/dotnetcore-microservices-poc/master/readme-images/dotnetcore-microservices-architecture.png" style="max-width: 100%;"></a>
 </p>
-
-* **Web** - a VueJS Single Page Application that provides insurance agents ability to select appropriate product for their customers, calculate price, create an offer and conclude the sales process by converting offer to policy. This application also provides search and view functions for policies and offers. Frontend talks to backend services via `agent-portal-gateway`.
-
-* **Agent Portal API Gateway** - is a special microservice whose main purpose it to hide complexity of the underlying back office services structure from client application. Usually we create a dedicated API gateway for each client app. In case in the future we add a Xamarin mobile app to our system, we will need to build a dedicated API gateway for it. API gateway provides also security barrier and does not allow unauthenticated request to be passed to backend services. Another popular usage of API gateways is content aggregation from multiple services.
-
-* **Auth Service** - a service responsible for users authentication. Our security system will be based on JWT tokens. Once user identifies himself correctly, auth service issues a token that is further use to check user permission and available products.
-
-* **Chat Service** - a service that uses SignalR to give agents ability to chat with each other.
-
-* **Payment Service** - main responsibilities: create Policy Account, show Policy Account list, register in payments from bank statement file. \
-This module is taking care of a managing policy accounts. Once the policy is created, an account is created in this service with expected money income.  PaymentService also has an implementation of a scheduled process where CSV file with payments is imported and payments are assigned to policy accounts. This component shows asynchronous communication between services using RabbitMQ and ability to create background jobs. It also features accessing database using Dapper.
-
-* **Policy Service** - creates offers, converts offers to insurance policies. \
-In this service we demonstrated usage of CQRS pattern for better read/write operation isolation. This service demonstrates two ways of communication between services: synchronous REST based calls to `PricingService` through HTTP Client to get the price, and asynchronous event based using RabbitMQ to publish information about newly created policies. In this service we also access RDBMS using NHibernate.
-
-* **Policy Search Service** - provides insurance policy search. \
-This module listens for events from RabbitMQ, converts received DTOs to “read model” and indexes given model in ElasticSearch to provide advanced search capabilities.
-
-* **Pricing Service** - a service responsible for calculation of price for given insurance product based on its parametrization. \
-For each product a tariff should be defined. The tariff is a set of rules on the basis of which the price is calculated. DynamicExpresso was used to parse the rules. During the policy purchase process, the `PolicyService` connects with this service to calculate a price. Price is calculated based on user’s answers for defined questions.
-
-* **Product Service** - simple insurance product catalog. \
-It provides basic information about each insurance product and its parameters that can be customized while creating an offer for a customer.
-
-* **Document Service** - this service uses JS Report to generate pdf certificates.
-
-* **Dashboard Service** - Dashboard that presents sales statistics. \
-Business dashboards that presents our agents sales results. Dashboard service subscribes to events of selling policies and index sales data in ElasticSearch. Then ElasticSearch aggregation framework is used to calculate sales stats like: total sales and number of policies per product per time period, sales per agent in given time period and sales timeline. Sales stats are nicely visualized using ChartJS.
-
-Each business microservice has also **.Api project** (`PaymentService.Api`, `PolicyService.Api` etc.), where we defined commands, events, queries and operations and **.Test project** (`PaymentService.Test`, `PolicyService.Test`) with unit and integration tests.
-
-## Running with Docker
-
-You must install Docker & Docker Compose before. \
-Scripts have been divided into two parts:
-
-* [`infra.yml`](scripts/infra.yml) runs the necessary infrastructure.
-* [`app.yml`](scripts/app.yml) is used to run the application.
-
-You can use scripts to build/run/stop/down all containers.
-
-To run the whole solution:
-
-```bash
-./infra-run.sh
-./app-run.sh
-```
-
->If ElasticSearch fails to start, try running `sudo sysctl -w vm.max_map_count=262144` first
-
-Once the application and infrastructure are started you can open http://localhost:8080 in your browser and see our welcome page.
-Once there you can use Account menu item to log into the system. Valid users and passwords can be found [here] (https://github.com/asc-lab/dotnetcore-microservices-poc/blob/master/AuthService/DataAccess/InsuranceAgentsInMemoryDb.cs). You can for example login as admin with password admin.
-
-## Manual running
-
-### Prerequisites
-
-Install [PostgreSQL](https://www.postgresql.org/) version >= 10.0.
-
-Install [RabbitMQ](https://www.rabbitmq.com/).
-
-Install [Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html) version >= 6.
-
-### Init databases
-
-#### Windows
-
-```bash
-cd postgres
-"PATH_TO_PSQL.EXE" --host "localhost" --port EXAMPLE_PORT --username "EXAMPLE_USER" --file "createdatabases.sql"
-```
-
-In my case this command looks like:
-
-```bash
-cd postgres
-"C:\Program Files\PostgreSQL\9.6\bin\psql.exe" --host "localhost" --port 5432 --username "postgres" --file "createdatabases.sql"
-```
-
-#### Linux
-
-```bash
-sudo -i -u postgres
-psql --host "localhost" --port 5432 --username "postgres" --file "PATH_TO_FILE/createdatabases.sql"
-```
-
-This script should create `lab_user` user and the following databases: `lab_netmicro_payments`, `lab_netmicro_jobs`, `lab_netmicro_policy` and `lab_netmicro_pricing`.
-
-### Run Eureka
-
-Service registry and discovery tool for our project is Eureka. It is included in the project.
-In order to start it open terminal / command prompt.
-
-```bash
-cd eureka-server
-./gradlew.[bat] bootRun
-```
-
-This should start Eureka and you should be able to go to http://localhost:8761/ and see Eureka management panel.
-
-### Build
-
-Build all projects from command line without test:
-
-#### Windows
-
-```bash
-cd scripts
-build-without-tests.bat
-```
-
-#### Linux
-
-```bash
-cd scripts
-./build-without-tests.sh
-```
-
-Build all projects from command with test:
-
-#### Windows
-
-```bash
-cd scripts
-build.bat
-```
-
-#### Linux
-
-```bash
-cd scripts
-./build.sh
-```
-
-## Run specific service
-
-Go to folder with specific service (`PolicyService`, `ProductService` etc) and use `dotnet run` command.
+<ul dir="auto">
+<li>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Web</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> - 一个 VueJS 单页应用程序，使保险代理人能够为其客户选择合适的产品、计算价格、创建报价并通过将报价转换为保单来结束销售流程。</font><font style="vertical-align: inherit;">该应用程序还提供政策和优惠的搜索和查看功能。</font><font style="vertical-align: inherit;">前端通过 与后端服务对话</font></font><code>agent-portal-gateway</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+</li>
+<li>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">代理门户 API 网关</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">- 是一种特殊的微服务，其主要目的是向客户端应用程序隐藏底层后台服务结构的复杂性。</font><font style="vertical-align: inherit;">通常我们为每个客户端应用程序创建一个专用的 API 网关。</font><font style="vertical-align: inherit;">如果将来我们将 Xamarin 移动应用程序添加到我们的系统中，我们将需要为其构建专用的 API 网关。</font><font style="vertical-align: inherit;">API网关还提供安全屏障，不允许未经身份验证的请求传递到后端服务。</font><font style="vertical-align: inherit;">API 网关的另一个流行用途是来自多个服务的内容聚合。</font></font></p>
+</li>
+<li>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Auth Service</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> - 负责用户身份验证的服务。</font><font style="vertical-align: inherit;">我们的安全系统将基于 JWT 令牌。</font><font style="vertical-align: inherit;">一旦用户正确识别自己的身份，身份验证服务就会发出一个令牌，该令牌进一步用于检查用户权限和可用产品。</font></font></p>
+</li>
+<li>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">聊天服务</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">- 一项使用 SignalR 使代理能够相互聊天的服务。</font></font></p>
+</li>
+<li>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">支付服务</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">- 主要职责：创建保单账户、显示保单账户列表、从银行对账单文件中登记付款。</font></font><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+该模块负责管理保单账户。</font><font style="vertical-align: inherit;">创建保单后，就会在此服务中创建一个具有预期货币收入的帐户。</font><font style="vertical-align: inherit;">PaymentService 还实现了预定流程，其中导入包含付款的 CSV 文件并将付款分配给保单账户。</font><font style="vertical-align: inherit;">该组件展示了使用 RabbitMQ 的服务之间的异步通信以及创建后台作业的能力。</font><font style="vertical-align: inherit;">它还具有使用 Dapper 访问数据库的功能。</font></font></p>
+</li>
+<li>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">保单服务</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">- 创建报价，将报价转换为保险单。</font></font><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+在此服务中，我们演示了如何使用 CQRS 模式来实现更好的读/写操作隔离。</font><font style="vertical-align: inherit;">该服务演示了服务之间的两种通信方式：</font></font><code>PricingService</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">通过 HTTP 客户端进行基于同步 REST 的调用以获取价格，以及使用 RabbitMQ 基于异步事件来发布有关新创建的策略的信息。</font><font style="vertical-align: inherit;">在此服务中，我们还使用 NHibernate 访问 RDBMS。</font></font></p>
+</li>
+<li>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">保单搜索服务</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">- 提供保单搜索。</font></font><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+该模块监听来自 RabbitMQ 的事件，将接收到的 DTO 转换为“读取模型”，并在 ElasticSearch 中为给定模型建立索引以提供高级搜索功能。</font></font></p>
+</li>
+<li>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">定价服务</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">- 负责根据给定保险产品的参数化计算价格的服务。</font></font><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+应为每种产品定义关税。</font><font style="vertical-align: inherit;">关税是计算价格所依据的一组规则。</font><font style="vertical-align: inherit;">DynamicExpresso 用于解析规则。</font><font style="vertical-align: inherit;">在保单购买过程中，系统</font></font><code>PolicyService</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">会连接此服务来计算价格。</font><font style="vertical-align: inherit;">价格是根据用户对定义问题的回答来计算的。</font></font></p>
+</li>
+<li>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">产品服务</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">-简单的保险产品目录。</font></font><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+它提供有关每种保险产品及其参数的基本信息，这些信息可以在为客户创建报价时进行定制。</font></font></p>
+</li>
+<li>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文档服务</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">- 该服务使用 JS Report 生成 pdf 证书。</font></font></p>
+</li>
+<li>
+<p dir="auto"><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">仪表板服务</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">- 显示销售统计数据的仪表板。</font></font><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+业务仪表板显示我们代理商的销售结果。</font><font style="vertical-align: inherit;">Dashboard 服务订阅 ElasticSearch 中的销售策略和指数销售数据的事件。</font><font style="vertical-align: inherit;">然后，ElasticSearch 聚合框架用于计算销售统计数据，例如：每个时间段内每个产品的总销售额和保单数量、给定时间段内每个代理的销售额以及销售时间表。</font><font style="vertical-align: inherit;">使用 ChartJS 可以很好地可视化销售统计数据。</font></font></p>
+</li>
+</ul>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">每个业务微服务还有</font><font style="vertical-align: inherit;">.Api</font></font><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">项目</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">（</font><font style="vertical-align: inherit;">等），我们在其中定义命令、事件、查询和操作，以及带有单元和集成测试的</font><strong><font style="vertical-align: inherit;">.Test 项目</font></strong><font style="vertical-align: inherit;">（</font><font style="vertical-align: inherit;">、</font><font style="vertical-align: inherit;">）。</font></font><code>PaymentService.Api</code><font style="vertical-align: inherit;"></font><code>PolicyService.Api</code><font style="vertical-align: inherit;"></font><strong><font style="vertical-align: inherit;"></font></strong><font style="vertical-align: inherit;"></font><code>PaymentService.Test</code><font style="vertical-align: inherit;"></font><code>PolicyService.Test</code><font style="vertical-align: inherit;"></font></p>
+<h2 tabindex="-1" dir="auto"><a id="user-content-running-with-docker" class="anchor" aria-hidden="true" tabindex="-1" href="#running-with-docker"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用 Docker 运行</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您必须先安装 Docker 和 Docker Compose。</font></font><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+脚本分为两部分：</font></font></p>
+<ul dir="auto">
+<li><a href="/asc-lab/dotnetcore-microservices-poc/blob/master/scripts/infra.yml"><code>infra.yml</code></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">运行必要的基础设施。</font></font></li>
+<li><a href="/asc-lab/dotnetcore-microservices-poc/blob/master/scripts/app.yml"><code>app.yml</code></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用于运行应用程序。</font></font></li>
+</ul>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您可以使用脚本来构建/运行/停止/关闭所有容器。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">运行整个解决方案：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>./infra-run.sh
+./app-run.sh</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="./infra-run.sh
+./app-run.sh" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<blockquote>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果ElasticSearch启动失败，</font></font><code>sudo sysctl -w vm.max_map_count=262144</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请先尝试运行</font></font></p>
+</blockquote>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">应用程序和基础设施启动后，您可以</font><font style="vertical-align: inherit;">在浏览器中打开</font></font><a href="http://localhost:8080" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">http://localhost:8080并查看我们的欢迎页面。</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">到达那里后，您可以使用“帐户”菜单项登录系统。</font><font style="vertical-align: inherit;">可以在[此处]找到有效的用户和密码（</font></font><a href="https://github.com/asc-lab/dotnetcore-microservices-poc/blob/master/AuthService/DataAccess/InsuranceAgentsInMemoryDb.cs"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">https://github.com/asc-lab/dotnetcore-microservices-poc/blob/master/AuthService/DataAccess/InsuranceAgentsInMemoryDb.cs</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">）。</font><font style="vertical-align: inherit;">例如，您可以使用密码 admin 以管理员身份登录。</font></font></p>
+<h2 tabindex="-1" dir="auto"><a id="user-content-manual-running" class="anchor" aria-hidden="true" tabindex="-1" href="#manual-running"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">手动运行</font></font></h2>
+<h3 tabindex="-1" dir="auto"><a id="user-content-prerequisites" class="anchor" aria-hidden="true" tabindex="-1" href="#prerequisites"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">先决条件</font></font></h3>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装</font></font><a href="https://www.postgresql.org/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PostgreSQL</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">版本 &gt;= 10.0。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装</font></font><a href="https://www.rabbitmq.com/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">RabbitMQ</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装</font></font><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Elasticsearch</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">版本 &gt;= 6。</font></font></p>
+<h3 tabindex="-1" dir="auto"><a id="user-content-init-databases" class="anchor" aria-hidden="true" tabindex="-1" href="#init-databases"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">初始化数据库</font></font></h3>
+<h4 tabindex="-1" dir="auto"><a id="user-content-windows" class="anchor" aria-hidden="true" tabindex="-1" href="#windows"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">视窗</font></font></h4>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">cd</span> postgres
+<span class="pl-s"><span class="pl-pds">"</span>PATH_TO_PSQL.EXE<span class="pl-pds">"</span></span> --host <span class="pl-s"><span class="pl-pds">"</span>localhost<span class="pl-pds">"</span></span> --port EXAMPLE_PORT --username <span class="pl-s"><span class="pl-pds">"</span>EXAMPLE_USER<span class="pl-pds">"</span></span> --file <span class="pl-s"><span class="pl-pds">"</span>createdatabases.sql<span class="pl-pds">"</span></span></pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="cd postgres
+&quot;PATH_TO_PSQL.EXE&quot; --host &quot;localhost&quot; --port EXAMPLE_PORT --username &quot;EXAMPLE_USER&quot; --file &quot;createdatabases.sql&quot;" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">就我而言，该命令如下所示：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">cd</span> postgres
+<span class="pl-s"><span class="pl-pds">"</span>C:\Program Files\PostgreSQL\9.6\bin\psql.exe<span class="pl-pds">"</span></span> --host <span class="pl-s"><span class="pl-pds">"</span>localhost<span class="pl-pds">"</span></span> --port 5432 --username <span class="pl-s"><span class="pl-pds">"</span>postgres<span class="pl-pds">"</span></span> --file <span class="pl-s"><span class="pl-pds">"</span>createdatabases.sql<span class="pl-pds">"</span></span></pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="cd postgres
+&quot;C:\Program Files\PostgreSQL\9.6\bin\psql.exe&quot; --host &quot;localhost&quot; --port 5432 --username &quot;postgres&quot; --file &quot;createdatabases.sql&quot;" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<h4 tabindex="-1" dir="auto"><a id="user-content-linux" class="anchor" aria-hidden="true" tabindex="-1" href="#linux"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Linux</font></font></h4>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>sudo -i -u postgres
+psql --host <span class="pl-s"><span class="pl-pds">"</span>localhost<span class="pl-pds">"</span></span> --port 5432 --username <span class="pl-s"><span class="pl-pds">"</span>postgres<span class="pl-pds">"</span></span> --file <span class="pl-s"><span class="pl-pds">"</span>PATH_TO_FILE/createdatabases.sql<span class="pl-pds">"</span></span></pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="sudo -i -u postgres
+psql --host &quot;localhost&quot; --port 5432 --username &quot;postgres&quot; --file &quot;PATH_TO_FILE/createdatabases.sql&quot;" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该脚本应创建</font></font><code>lab_user</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用户和以下数据库</font><font style="vertical-align: inherit;">：</font></font><code>lab_netmicro_payments</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">、</font></font><code>lab_netmicro_jobs</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">和</font></font><code>lab_netmicro_policy</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font><code>lab_netmicro_pricing</code><font style="vertical-align: inherit;"></font></p>
+<h3 tabindex="-1" dir="auto"><a id="user-content-run-eureka" class="anchor" aria-hidden="true" tabindex="-1" href="#run-eureka"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">运行尤里卡</font></font></h3>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">我们项目的服务注册和发现工具是 Eureka。</font><font style="vertical-align: inherit;">它包含在项目中。</font><font style="vertical-align: inherit;">为了启动它，打开终端/命令提示符。</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">cd</span> eureka-server
+./gradlew.[bat] bootRun</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="cd eureka-server
+./gradlew.[bat] bootRun" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这应该会启动 Eureka，您应该能够访问</font></font><a href="http://localhost:8761/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">http://localhost:8761/</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">并查看 Eureka 管理面板。</font></font></p>
+<h3 tabindex="-1" dir="auto"><a id="user-content-build" class="anchor" aria-hidden="true" tabindex="-1" href="#build"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">建造</font></font></h3>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">从命令行构建所有项目而不进行测试：</font></font></p>
+<h4 tabindex="-1" dir="auto"><a id="user-content-windows-1" class="anchor" aria-hidden="true" tabindex="-1" href="#windows-1"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">视窗</font></font></h4>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">cd</span> scripts
+build-without-tests.bat</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="cd scripts
+build-without-tests.bat" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<h4 tabindex="-1" dir="auto"><a id="user-content-linux-1" class="anchor" aria-hidden="true" tabindex="-1" href="#linux-1"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Linux</font></font></h4>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">cd</span> scripts
+./build-without-tests.sh</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="cd scripts
+./build-without-tests.sh" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">通过测试从命令构建所有项目：</font></font></p>
+<h4 tabindex="-1" dir="auto"><a id="user-content-windows-2" class="anchor" aria-hidden="true" tabindex="-1" href="#windows-2"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">视窗</font></font></h4>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">cd</span> scripts
+build.bat</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="cd scripts
+build.bat" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<h4 tabindex="-1" dir="auto"><a id="user-content-linux-2" class="anchor" aria-hidden="true" tabindex="-1" href="#linux-2"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Linux</font></font></h4>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">cd</span> scripts
+./build.sh</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="cd scripts
+./build.sh" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<h2 tabindex="-1" dir="auto"><a id="user-content-run-specific-service" class="anchor" aria-hidden="true" tabindex="-1" href="#run-specific-service"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">运行特定服务</font></font></h2>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">转到具有特定服务（等）的文件夹</font></font><code>PolicyService</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">并</font></font><code>ProductService</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用</font></font><code>dotnet run</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">命令。</font></font></p>
+</article></div>
